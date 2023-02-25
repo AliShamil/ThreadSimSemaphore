@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadSimSemaphore", "ThreadSimSemaphore\ThreadSimSemaphore.csproj", "{E77B503A-ECC9-4961-B5F9-E7A73DA37562}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E77B503A-ECC9-4961-B5F9-E7A73DA37562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E77B503A-ECC9-4961-B5F9-E7A73DA37562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E77B503A-ECC9-4961-B5F9-E7A73DA37562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E77B503A-ECC9-4961-B5F9-E7A73DA37562}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CE97D0F8-6D80-4293-9A51-B2E84FC84657}
+	EndGlobalSection
+EndGlobal

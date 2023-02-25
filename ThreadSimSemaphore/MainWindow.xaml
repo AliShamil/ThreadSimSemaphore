@@ -1,0 +1,59 @@
+﻿<Window x:Class="ThreadSimSemaphore.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ThreadSimSemaphore" xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <ListView Name="CurrentWorkingThreadsList" ItemsSource="{Binding CurrentWorkingThreads}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <ListView Grid.Column="1" Name="WaitingThreadsList" ItemsSource="{Binding WaitingThreads}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <ListView Grid.Column="2" Name="CreatedThreadsThreadsList" ItemsSource="{Binding CreatedThreads}" MouseDoubleClick="CreatedThreadsThreadsList_MouseDoubleClick">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+
+        <Button 
+            Name="BtnCreate"
+            Grid.Column="2"
+            Grid.Row="1"
+            Content="Create"
+            FontSize="18"
+            Margin="30 10" 
+            Click="BtnCreate_Click"/>
+
+        <mah:NumericUpDown Name="NumericUp" ValueChanged="NumericUp_ValueChanged" Margin="30 10" Value="3" Background="AliceBlue" Minimum="1"   
+            Grid.Row="1"></mah:NumericUpDown>
+    </Grid>
+</Window>
