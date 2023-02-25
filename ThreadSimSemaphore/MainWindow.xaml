@@ -6,18 +6,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ThreadSimSemaphore" xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" >
     <Grid>
-        <Grid.ColumnDefinitions>
+        <!--<Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>-->
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock>Working Threads</TextBlock>
+            <TextBlock Grid.Column="1">Waiting Threads</TextBlock>
+            <TextBlock Grid.Column="2">Created Threads</TextBlock>
+            
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
         <ListView Name="CurrentWorkingThreadsList" ItemsSource="{Binding CurrentWorkingThreads}">
             <ListView.ItemTemplate>
@@ -42,7 +61,9 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
+        </Grid>
+        <DockPanel Grid.Row="2">
+            
 
         <Button 
             Name="BtnCreate"
@@ -53,7 +74,8 @@
             Margin="30 10" 
             Click="BtnCreate_Click"/>
 
-        <mah:NumericUpDown Name="NumericUp" ValueChanged="NumericUp_ValueChanged" Margin="30 10" Value="3" Background="AliceBlue" Minimum="1"   
-            Grid.Row="1"></mah:NumericUpDown>
+        <mah:NumericUpDown Name="NumericUp"  Margin="30 10"  Background="AliceBlue"
+            ></mah:NumericUpDown>
+        </DockPanel>
     </Grid>
 </Window>

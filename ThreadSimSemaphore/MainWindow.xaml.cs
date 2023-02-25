@@ -37,7 +37,7 @@ namespace ThreadSimSemaphore
             WaitingThreads = new();
             CurrentWorkingThreads = new();
 
-            _semaphore = new((int)NumericUp.Value, (int)NumericUp.Value, "Sema");
+            _semaphore = new(3, 3, "Sema");
         }
 
         private void BtnCreate_Click(object sender, RoutedEventArgs e)
@@ -76,12 +76,5 @@ namespace ThreadSimSemaphore
                 t.Start(_semaphore);
             }
         }
-
-        private void NumericUp_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
-        {
-          
-        }
-
-
     }
 }
