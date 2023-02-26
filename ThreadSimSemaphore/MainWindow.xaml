@@ -4,69 +4,79 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ThreadSimSemaphore" xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+       
+        xmlns:local="clr-namespace:ThreadSimSemaphore" xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" >
-    <Grid>
-        <!--<Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>-->
+        Title="MainWindow" Name="MainWin" Height="450" Width="800" >
+    <Grid >
+
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBlock>Working Threads</TextBlock>
-            <TextBlock Grid.Column="1">Waiting Threads</TextBlock>
-            <TextBlock Grid.Column="2">Created Threads</TextBlock>
-            
-        </Grid>
 
-        <Grid Grid.Row="1">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" FontFamily="Comic Sans MS" FontSize="15" Text="Working Threads" />
+                <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="Purple" Margin="4">
+                    <ListView   ItemsSource="{Binding WorkingThreads}" FontFamily="Comic Sans MS">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
+        </DockPanel>
+
+        <DockPanel Grid.Column="1">
+                <TextBlock DockPanel.Dock="Top" FontFamily="Comic Sans MS" FontSize="15" HorizontalAlignment="Center" Text="Waiting Threads"/>
+            <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderThickness="2" BorderBrush="Purple"   Margin="4">
+                    <ListView  ItemsSource="{Binding WaitingThreads}" FontFamily="Comic Sans MS">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
+        </DockPanel>
+
+        <DockPanel Grid.Column="2" >
+            <TextBlock DockPanel.Dock="Top"  FontFamily="Comic Sans MS" FontSize="15" HorizontalAlignment="Center" Text="Created Threads" />
+                <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  BorderThickness="2" BorderBrush="Purple" Margin="4">
+
+                    <ListView  Name="CreatedList" FontFamily="Comic Sans MS" ItemsSource="{Binding CreatedThreads}"  MouseDoubleClick="CreatedList_MouseDoubleClick">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                
+            </Border>
+        </DockPanel>
+
+        </Grid>
+        <Separator Grid.Row="1" BorderBrush="Purple" BorderThickness="2"/>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-
-        <ListView Name="CurrentWorkingThreadsList" ItemsSource="{Binding CurrentWorkingThreads}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-        <ListView Grid.Column="1" Name="WaitingThreadsList" ItemsSource="{Binding WaitingThreads}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-        <ListView Grid.Column="2" Name="CreatedThreadsThreadsList" ItemsSource="{Binding CreatedThreads}" MouseDoubleClick="CreatedThreadsThreadsList_MouseDoubleClick">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        </Grid>
-        <DockPanel Grid.Row="2">
-            
-
         <Button 
+            FontFamily="Comic Sans MS"
+            DockPanel.Dock="Right"
             Name="BtnCreate"
+            
             Grid.Column="2"
             Grid.Row="1"
             Content="Create"
@@ -74,8 +84,18 @@
             Margin="30 10" 
             Click="BtnCreate_Click"/>
 
-        <mah:NumericUpDown Name="NumericUp"  Margin="30 10"  Background="AliceBlue"
-            ></mah:NumericUpDown>
-        </DockPanel>
+        <mah:NumericUpDown
+            FontFamily="Comic Sans MS"      
+            x:Name="UpDown"
+            Grid.Row="1"
+            Margin="10"
+            Foreground="#8DA7BE"
+            Value="1"
+            Minimum="1"
+            Maximum="20"
+            ValueChanged="UpDown_ValueChanged"
+            />
+        </Grid>
+
     </Grid>
 </Window>

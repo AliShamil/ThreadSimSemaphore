@@ -1,7 +1,10 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,66 +18,113 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ThreadSimSemaphore
+namespace ThreadSimSemaphore;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+
+    private int availableThreads;
+    private double? upDownValue = 0;
+    private readonly Semaphore _semaphore;
+    public ObservableCollection<Thread> CreatedThreads { get; set; }
+    public ObservableCollection<Thread> WaitingThreads { get; set; }
+    public ObservableCollection<Thread> WorkingThreads { get; set; }
+
+
+    public MainWindow()
     {
-        public ObservableCollection<Thread> CreatedThreads { get; set; }
-        public ObservableCollection<Thread> WaitingThreads { get; set; }
-        public ObservableCollection<Thread> CurrentWorkingThreads { get; set; }
-        private readonly Semaphore _semaphore;
+        InitializeComponent();
+        DataContext = this;
 
-        public MainWindow()
+        CreatedThreads = new();
+        WaitingThreads = new();
+        WorkingThreads = new();
+
+        upDownValue = UpDown.Value;
+        
+        _semaphore = new(1, 20, "ThreadManagementSemaphore");
+        availableThreads = 1;
+    }
+
+    private void BtnCreate_Click(object sender, RoutedEventArgs e)
+    {
+        var t = new Thread(ThreadManagementSimulation);
+
+        t.Name = "Thread number " + t.ManagedThreadId;
+
+        CreatedThreads.Add(t);
+    }
+   
+    private void ThreadManagementSimulation(object? semaphore)
+    {
+
+        if (semaphore is Semaphore s)
         {
-            InitializeComponent();
-            DataContext = this;
+            Thread.Sleep(3000);
 
-
-            CreatedThreads = new();
-            WaitingThreads = new();
-            CurrentWorkingThreads = new();
-
-            _semaphore = new(3, 3, "Sema");
-        }
-
-        private void BtnCreate_Click(object sender, RoutedEventArgs e)
-        {
-            var t = new Thread(MyThreadSimulation);
-            t.Name = "Thread number " + t.ManagedThreadId;
-
-            CreatedThreads.Add(t);
-        }
-
-        private void MyThreadSimulation(object? semaphore)
-        {
-            if (semaphore is Semaphore s)
+            if (s.WaitOne())
             {
-                Thread.Sleep(3000);
+                var current = Thread.CurrentThread;
+                Dispatcher.Invoke(() => WaitingThreads.Remove(current));
+                Dispatcher.Invoke(() => WorkingThreads.Add(current));
 
-                if (s.WaitOne())
+                availableThreads--;
+                
+                var workingThreads = Random.Shared.Next(3, 10);
+                    
+                current.Name = current.Name + "->" + workingThreads;
+
+
+                while (workingThreads > 0)
                 {
-                    var t = Thread.CurrentThread;
-                    Dispatcher.Invoke(() => WaitingThreads.Remove(t));
-                    Dispatcher.Invoke(() => CurrentWorkingThreads.Add(t));
-                    Thread.Sleep(7000);
-                    Dispatcher.Invoke(() => CurrentWorkingThreads.Remove(t));
-                    s.Release();
+                    Thread.Sleep(1500);
+                    workingThreads--;
                 }
+
+                Dispatcher.Invoke(() => WorkingThreads.Remove(current));
+                availableThreads++;
+                s.Release();
             }
         }
-
-        private void CreatedThreadsThreadsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    }
+    
+    private void UpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
+    {
+        if (sender is NumericUpDown upDown)
         {
-            if (CreatedThreadsThreadsList.SelectedItem is Thread t)
+            if (upDownValue < upDown.Value)
             {
-                CreatedThreads.Remove(t);
-
-                WaitingThreads.Add(t);
-                t.Start(_semaphore);
+                _semaphore?.Release();
+                availableThreads++;
             }
+            else
+            {
+                if (availableThreads == 0)
+                {
+                    upDown.Value = upDownValue;
+                    return;
+                }
+
+                availableThreads--;
+                _semaphore?.WaitOne();
+            }
+
+
+            upDownValue = upDown.Value;
+        }
+    }
+
+    private void CreatedList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (CreatedList.SelectedItem is Thread t)
+        {
+            CreatedThreads.Remove(t);
+
+            WaitingThreads.Add(t);
+            t.Start(_semaphore);
         }
     }
 }
